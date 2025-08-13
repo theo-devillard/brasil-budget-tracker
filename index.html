@@ -579,22 +579,26 @@
             cursor: pointer;
         }
         
-        .device-mobile .nav-btn {
+        /* Override base nav-btn styles for mobile */
+        .device-mobile .nav-btn,
+        .device-mobile .nav-btn:hover,
+        .device-mobile .nav-btn:active,
+        .device-mobile .nav-btn:focus {
             background: rgba(255,255,255,0.2) !important;
             color: white !important;
             border: none !important;
+            transform: none !important;
         }
         
+        /* Active state for mobile nav buttons */
         .device-mobile .nav-btn.active,
         .device-mobile .nav-btn.active:hover,
         .device-mobile .nav-btn.active:focus,
-        .device-mobile .nav-btn.active:active {
+        .device-mobile .nav-btn.active:active,
+        .device-mobile .nav-btn.active:visited {
             background: rgba(255,255,255,0.9) !important;
             color: #002776 !important;
-        }
-        
-        /* Ensure active state persists during touch interactions */
-        .device-mobile .nav-btn.active {
+            transform: none !important;
             opacity: 1 !important;
         }
         
@@ -1550,8 +1554,11 @@
             // Show selected page
             document.getElementById(pageId).classList.add('active');
             
-            // Set active nav button
-            event.target.classList.add('active');
+            // Set active nav button - find the correct button by page ID
+            const targetButton = document.querySelector(`[onclick*="showPage('${pageId}')"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
             
             currentPage = pageId;
             
@@ -1976,6 +1983,21 @@
             
             // Update charts with a small delay to ensure DOM is ready
             setTimeout(updateCharts, 100);
+            
+            // Ensure active nav button state is maintained on mobile
+            if (currentDevice === 'mobile') {
+                setTimeout(() => {
+                    const activeButton = document.querySelector(`[onclick*="showPage('${currentPage}')"]`);
+                    if (activeButton && !activeButton.classList.contains('active')) {
+                        // Remove active from all buttons first
+                        document.querySelectorAll('.nav-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        // Add active to current page button
+                        activeButton.classList.add('active');
+                    }
+                }, 200);
+            }
         }
 
         function updateDashboard() {
