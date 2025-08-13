@@ -1593,10 +1593,16 @@
             autoSave();
             updateDisplay();
             
-            // Refresh page after saving settings
+            // Show success feedback before reload
+            const saveBtn = document.querySelector('button[onclick="updateSetup()"]');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = '✅ Sauvegardé!';
+            saveBtn.style.background = '#10b981';
+            
+            // Refresh page after showing feedback
             setTimeout(() => {
                 location.reload();
-            }, 500);
+            }, 1000);
         }
 
         // Main Update Display Function
