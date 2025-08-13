@@ -573,8 +573,12 @@
         
         /* Mobile Modal Optimizations */
         .device-mobile .modal {
+            display: none !important;
+        }
+        
+        .device-mobile .modal.active {
             padding: 20px;
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: center;
         }
