@@ -485,17 +485,20 @@
         }
         
         .device-mobile .container-mobile {
-            height: auto;
+            height: auto !important;
             min-height: 100vh;
             padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); /* Space for bottom nav + safe area */
+            display: block !important;
+            flex-direction: initial !important;
         }
         
         .device-mobile .page {
             overflow-y: visible;
+            flex: none !important;
         }
         
         .device-mobile .page.active {
-            display: block;
+            display: block !important;
         }
         
         .device-mobile .nav-mobile {
@@ -629,6 +632,18 @@
         .device-mobile button {
             min-height: 44px;
             touch-action: manipulation;
+            cursor: pointer;
+        }
+        
+        .device-mobile .nav-btn {
+            background: rgba(255,255,255,0.2) !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .device-mobile .nav-btn.active {
+            background: rgba(255,255,255,0.9) !important;
+            color: #002776 !important;
         }
         
         /* Desktop Layout Enhancements */
@@ -2083,7 +2098,7 @@
             // Calculate variances
             const incomeVariance = actualIncome - plannedIncome;
             const expenseVariance = actualExpenses - plannedExpenses;
-            const netVariance = incomeVariance - expenseVariance;
+            const netVariance = actualIncome - actualExpenses;
 
             let comparisonHTML = `
                 <div class="planning-comparison">
