@@ -1218,12 +1218,16 @@
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
             
-            // Set default date to today for transaction modals
-            const today = new Date().toISOString().split('T')[0];
+            // Set default date to today in Rio de Janeiro timezone (UTC-3)
+            const now = new Date();
+            const rioTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) - (3 * 3600000));
+            const todayString = rioTime.getFullYear() + '-' + 
+                String(rioTime.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(rioTime.getDate()).padStart(2, '0');
             if (modalId === 'expenseModal') {
-                document.getElementById('expenseDate').value = today;
+                document.getElementById('expenseDate').value = todayString;
             } else if (modalId === 'incomeModal') {
-                document.getElementById('incomeDate').value = today;
+                document.getElementById('incomeDate').value = todayString;
             }
         }
 
@@ -1438,6 +1442,11 @@
             
             autoSave();
             updateDisplay();
+            
+            // Refresh display to ensure all data is updated
+            setTimeout(() => {
+                updateDisplay();
+            }, 100);
         }
 
         function addExpense() {
@@ -1478,6 +1487,11 @@
             
             autoSave();
             updateDisplay();
+            
+            // Refresh display to ensure all data is updated
+            setTimeout(() => {
+                updateDisplay();
+            }, 100);
         }
 
         function addRecurringIncome() {
@@ -1579,8 +1593,10 @@
             autoSave();
             updateDisplay();
             
-            // Show success message instead of auto-refresh
-            alert('Paramètres sauvegardés avec succès !');
+            // Refresh page after saving settings
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         }
 
         // Main Update Display Function
@@ -2096,19 +2112,28 @@
                 const selector = document.getElementById(selectorId);
                 if (!selector) return;
 
-                // Keep default options
-                const defaultOptions = selector.innerHTML;
+                // Store current value to restore after rebuild
+                const currentValue = selector.value;
                 
-                // Add custom categories
-                budget.customCategories.forEach(category => {
-                    const optionExists = Array.from(selector.options).some(option => option.value === category.name);
-                    if (!optionExists) {
-                        const option = document.createElement('option');
-                        option.value = category.name;
-                        option.textContent = `${category.emoji} ${category.name}`;
-                        selector.appendChild(option);
+                // Keep only default options (remove custom categories)
+                Array.from(selector.options).forEach(option => {
+                    if (budget.customCategories.some(cat => cat.name === option.value)) {
+                        selector.removeChild(option);
                     }
                 });
+                
+                // Add updated custom categories
+                budget.customCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = `${category.emoji} ${category.name}`;
+                    selector.appendChild(option);
+                });
+                
+                // Restore selected value if it still exists
+                if (Array.from(selector.options).some(option => option.value === currentValue)) {
+                    selector.value = currentValue;
+                }
             });
         }
 
