@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Budget de Léa - Brésil Automne 2025</title>
     
     <!-- PWA Meta Tags -->
@@ -471,6 +471,135 @@
         .nav-btn.active {
             background: rgba(255,255,255,0.9);
             color: #002776;
+        }
+
+        /* Device-Specific Layout Styles */
+        
+        /* Mobile Layout */
+        .device-mobile .container-mobile {
+            padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); /* Space for bottom nav + safe area */
+        }
+        
+        .device-mobile .nav-mobile {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #009739, #FEDD00);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-bottom: none;
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .device-mobile .nav-buttons {
+            justify-content: space-around;
+            max-width: 100%;
+        }
+        
+        .device-mobile .nav-btn-mobile {
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            min-width: 60px;
+            font-size: 0.7em;
+            border-radius: 8px;
+        }
+        
+        .device-mobile .nav-icon {
+            font-size: 1.2em;
+            margin-bottom: 2px;
+        }
+        
+        .device-mobile .nav-label {
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        /* Mobile Dashboard Optimizations */
+        .device-mobile .dashboard {
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 15px;
+        }
+        
+        .device-mobile .widget {
+            padding: 12px;
+            border-radius: 12px;
+        }
+        
+        .device-mobile .quick-actions {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .device-mobile .action-btn {
+            padding: 15px;
+            font-size: 0.9em;
+            border-radius: 12px;
+        }
+        
+        /* Mobile Modal Optimizations */
+        .device-mobile .modal-content {
+            width: 95%;
+            max-width: none;
+            border-radius: 12px 12px 0 0;
+            position: fixed;
+            bottom: 0;
+            top: auto;
+            transform: translateX(-50%);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .device-mobile .modal.active .modal-content {
+            animation: slideUpMobile 0.3s ease-out;
+        }
+        
+        @keyframes slideUpMobile {
+            from {
+                transform: translateX(-50%) translateY(100%);
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        /* Desktop Layout Enhancements */
+        .device-desktop .container-desktop {
+            max-width: 1600px;
+        }
+        
+        .device-desktop .nav-desktop {
+            padding: 12px 30px;
+        }
+        
+        .device-desktop .dashboard {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            padding: 25px;
+            gap: 25px;
+        }
+        
+        @media (min-width: 1200px) {
+            .device-desktop .dashboard {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .device-desktop .widget {
+            padding: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .device-desktop .widget:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .device-desktop .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,151,57,0.3);
         }
 
         /* Page Styles */
@@ -1174,6 +1303,80 @@
         let balanceProjectionChart = null;
         let categoryPieChart = null;
         let plannedVsActualChart = null;
+        
+        // Device Detection
+        let currentDevice = 'desktop';
+        
+        function detectDevice() {
+            const userAgent = navigator.userAgent;
+            const isIPhone = /iPhone/i.test(userAgent);
+            const isIPad = /iPad/i.test(userAgent);
+            const isAndroid = /Android/i.test(userAgent);
+            const isMobile = isIPhone || isIPad || isAndroid || window.innerWidth <= 768;
+            
+            return {
+                isIPhone,
+                isIPad,
+                isAndroid,
+                isMobile,
+                isDesktop: !isMobile
+            };
+        }
+        
+        function initializeLayout() {
+            const device = detectDevice();
+            currentDevice = device.isMobile ? 'mobile' : 'desktop';
+            
+            // Add device class to body for CSS targeting
+            document.body.className = `device-${currentDevice}`;
+            
+            if (device.isMobile) {
+                loadMobileLayout();
+            } else {
+                loadDesktopLayout();
+            }
+        }
+        
+        function loadMobileLayout() {
+            // Move navigation to bottom for mobile
+            const container = document.querySelector('.container');
+            const navBar = document.querySelector('.nav-bar');
+            const header = document.querySelector('.header');
+            
+            // Add mobile classes
+            navBar.classList.add('nav-mobile');
+            container.classList.add('container-mobile');
+            
+            // Move nav to bottom
+            container.appendChild(navBar);
+            
+            // Update navigation for mobile
+            const navButtons = document.querySelector('.nav-buttons');
+            navButtons.innerHTML = `
+                <button class="nav-btn nav-btn-mobile active" onclick="showPage('dashboard')">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Accueil</span>
+                </button>
+                <button class="nav-btn nav-btn-mobile" onclick="showPage('monthly')">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Mensuel</span>
+                </button>
+                <button class="nav-btn nav-btn-mobile" onclick="showPage('settings')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Paramètres</span>
+                </button>
+            `;
+        }
+        
+        function loadDesktopLayout() {
+            // Keep default desktop layout but add desktop-specific enhancements
+            const container = document.querySelector('.container');
+            const navBar = document.querySelector('.nav-bar');
+            
+            // Add desktop classes
+            navBar.classList.add('nav-desktop');
+            container.classList.add('container-desktop');
+        }
         
         let budget = {
             total: 0,
@@ -2599,6 +2802,9 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize device-specific layout first
+            initializeLayout();
+            
             loadBudgetData();
             updateDisplay();
             
@@ -2617,6 +2823,22 @@
                     e.preventDefault();
                     this.click();
                 });
+            });
+            
+            // Handle window resize for dynamic layout switching
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    const newDevice = detectDevice();
+                    const newDeviceType = newDevice.isMobile ? 'mobile' : 'desktop';
+                    
+                    if (newDeviceType !== currentDevice) {
+                        currentDevice = newDeviceType;
+                        initializeLayout();
+                        updateDisplay();
+                    }
+                }, 250);
             });
         });
     </script>
