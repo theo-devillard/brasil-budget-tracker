@@ -623,6 +623,22 @@
             width: 100%;
             padding: 12px;
             font-size: 1em;
+            min-height: 48px; /* Ensure touch target is large enough */
+        }
+        
+        /* Improve touch targets on mobile */
+        .device-mobile button {
+            min-height: 44px;
+            min-width: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        }
+        
+        .device-mobile .edit-btn,
+        .device-mobile .delete-btn {
+            min-height: 40px;
+            min-width: 40px;
+            padding: 8px;
         }
         
         /* Desktop Layout Enhancements */
@@ -961,27 +977,27 @@
                 <!-- Overview Cards -->
                 <div class="overview-cards">
                     <div class="overview-card">
-                        <h3>Solde Actuel</h3>
+                        <h3>Solde Actuel Estimé</h3>
                         <div class="value" id="dashCurrentBalance">0 $ CAD</div>
                         <div class="subvalue" id="dashCurrentBalanceBRL">0 R$</div>
                     </div>
                     <div class="overview-card">
-                        <h3>Progression</h3>
+                        <h3>% Budget Atteint</h3>
                         <div class="value" id="dashProgress">0%</div>
                         <div class="subvalue">du budget utilisé</div>
                     </div>
                     <div class="overview-card">
-                        <h3>De Tout Temps</h3>
+                        <h3>Dépenses Totales</h3>
                         <div class="value" id="dashTotalExpenses">0 $ CAD</div>
                         <div class="subvalue" id="dashTotalExpensesBRL">0 R$</div>
                     </div>
                     <div class="overview-card">
-                        <h3>Ce Mois</h3>
+                        <h3>Dépenses Du Mois</h3>
                         <div class="value" id="dashMonthBalance">0 $ CAD</div>
                         <div class="subvalue" id="dashMonthBalanceBRL">0 R$</div>
                     </div>
                     <div class="overview-card">
-                        <h3>Budget Total</h3>
+                        <h3>Budget de l'Échange</h3>
                         <div class="value" id="dashTotalBudget">0 $ CAD</div>
                         <div class="subvalue" id="dashTotalBudgetBRL">0 R$</div>
                     </div>
@@ -1289,6 +1305,10 @@
             </div>
             <div class="form-group">
                 <label>Montant</label>
+                <div class="currency-toggle">
+                    <button id="editTransactionCADBtn" class="active" onclick="switchEditTransactionCurrency('CAD')">CAD</button>
+                    <button id="editTransactionBRLBtn" onclick="switchEditTransactionCurrency('BRL')">BRL</button>
+                </div>
                 <input type="number" id="editTransactionAmount" placeholder="Montant" step="0.01">
             </div>
             <div class="form-group">
@@ -1376,6 +1396,7 @@
         let currentRecurringIncomeCurrency = 'CAD';
         let currentRecurringExpenseCurrency = 'CAD';
         let currentEditRecurringCurrency = 'CAD';
+        let currentEditTransactionCurrency = 'CAD';
         let currentMonth = new Date();
         let currentPage = 'dashboard';
         let editingTransaction = null;
@@ -1459,6 +1480,35 @@
             // Add desktop classes
             navBar.classList.add('nav-desktop');
             container.classList.add('container-desktop');
+        }
+        
+        function initializeTouchEvents(container = document) {
+            // Initialize touch events for dynamically added buttons
+            const buttonsWithOnclick = container.querySelectorAll('button[onclick]');
+            buttonsWithOnclick.forEach(button => {
+                if (!button.hasAttribute('data-touch-initialized') && !button.matches('input, textarea, select')) {
+                    button.setAttribute('data-touch-initialized', 'true');
+                    
+                    button.addEventListener('touchstart', function(e) {
+                        this.style.opacity = '0.7';
+                    });
+                    
+                    button.addEventListener('touchend', function(e) {
+                        this.style.opacity = '';
+                        if (this.tagName === 'BUTTON') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setTimeout(() => {
+                                this.click();
+                            }, 10);
+                        }
+                    });
+                    
+                    button.addEventListener('touchcancel', function(e) {
+                        this.style.opacity = '';
+                    });
+                }
+            });
         }
         
         let budget = {
@@ -1587,6 +1637,14 @@
             currentEditRecurringCurrency = currency;
             const cadBtn = document.getElementById('editRecurringCADBtn');
             const brlBtn = document.getElementById('editRecurringBRLBtn');
+            if (cadBtn) cadBtn.classList.toggle('active', currency === 'CAD');
+            if (brlBtn) brlBtn.classList.toggle('active', currency === 'BRL');
+        }
+        
+        function switchEditTransactionCurrency(currency) {
+            currentEditTransactionCurrency = currency;
+            const cadBtn = document.getElementById('editTransactionCADBtn');
+            const brlBtn = document.getElementById('editTransactionBRLBtn');
             if (cadBtn) cadBtn.classList.toggle('active', currency === 'CAD');
             if (brlBtn) brlBtn.classList.toggle('active', currency === 'BRL');
         }
@@ -1911,6 +1969,11 @@
             
             // Update charts with a small delay to ensure DOM is ready
             setTimeout(updateCharts, 100);
+            
+            // Reinitialize touch events for mobile after DOM updates
+            if (currentDevice === 'mobile') {
+                setTimeout(initializeTouchEvents, 150);
+            }
         }
 
         function updateDashboard() {
@@ -2221,6 +2284,10 @@
                 document.getElementById('editTransactionCategoryGroup').style.display = 'none';
             }
             
+            // Set currency based on transaction's original currency
+            const currency = transaction.originalCurrency || 'CAD';
+            switchEditTransactionCurrency(currency);
+            
             openModal('editTransactionModal');
         }
 
@@ -2245,8 +2312,18 @@
             
             if (transaction) {
                 transaction.description = description;
-                transaction.amount = amount;
-                transaction.originalAmount = amount;
+                
+                // Handle currency conversion
+                if (currentEditTransactionCurrency === 'BRL') {
+                    transaction.amount = amount / exchangeRate; // Convert BRL to CAD for storage
+                    transaction.originalAmount = amount;
+                    transaction.originalCurrency = 'BRL';
+                } else {
+                    transaction.amount = amount;
+                    transaction.originalAmount = amount;
+                    transaction.originalCurrency = 'CAD';
+                }
+                
                 transaction.date = dateInput;
                 transaction.month = date.getMonth();
                 transaction.year = date.getFullYear();
@@ -2891,21 +2968,36 @@
             loadBudgetData();
             updateDisplay();
             
-            // Add touch event support for better iPhone compatibility
-            document.addEventListener('touchend', function(e) {
-                if (e.target.onclick) {
-                    e.preventDefault();
-                    e.target.click();
-                }
-            });
-            
-            // Ensure all buttons with onclick work with touch
-            const buttonsWithOnclick = document.querySelectorAll('[onclick]');
+            // Add touch event support for better iPhone compatibility - more selective approach
+            const buttonsWithOnclick = document.querySelectorAll('button[onclick]');
             buttonsWithOnclick.forEach(button => {
-                button.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    this.click();
-                });
+                // Only add touch handling if it's not an input element that needs normal touch behavior
+                if (!button.matches('input, textarea, select')) {
+                    button.addEventListener('touchstart', function(e) {
+                        // Add visual feedback
+                        this.style.opacity = '0.7';
+                    });
+                    
+                    button.addEventListener('touchend', function(e) {
+                        // Remove visual feedback
+                        this.style.opacity = '';
+                        
+                        // Only prevent default and trigger click if this is a button
+                        if (this.tagName === 'BUTTON') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            // Use setTimeout to ensure the click happens after touch processing
+                            setTimeout(() => {
+                                this.click();
+                            }, 10);
+                        }
+                    });
+                    
+                    button.addEventListener('touchcancel', function(e) {
+                        // Remove visual feedback if touch is cancelled
+                        this.style.opacity = '';
+                    });
+                }
             });
             
             // Handle window resize for dynamic layout switching
