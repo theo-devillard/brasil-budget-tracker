@@ -32,11 +32,9 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #009739 0%, #FEDD00 30%, #002776 100%);
             min-height: 100vh;
-            height: 100vh;
             padding: 15px;
             font-size: 14px;
             margin: 0;
-            overflow: hidden;
             /* Touch improvements for iOS */
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -50,9 +48,6 @@
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             overflow: hidden;
-            height: calc(100vh - 30px);
-            display: flex;
-            flex-direction: column;
         }
 
         .header {
@@ -576,60 +571,71 @@
         
         /* Mobile Modal Optimizations */
         .device-mobile .modal {
-            padding: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .device-mobile .modal-content {
             width: 100%;
-            max-width: 100%;
-            border-radius: 20px 20px 0 0;
-            position: fixed;
-            bottom: 0;
+            max-width: 90%;
+            border-radius: 16px;
+            position: relative;
+            bottom: auto;
             top: auto;
-            left: 0;
-            right: 0;
+            left: auto;
+            right: auto;
             transform: none;
-            max-height: 85vh;
+            max-height: 80vh;
             overflow-y: auto;
             margin: 0;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             padding-bottom: env(safe-area-inset-bottom, 0px);
         }
         
         .device-mobile .modal.active .modal-content {
-            animation: slideUpMobile 0.3s ease-out;
+            animation: scaleInMobile 0.3s ease-out;
         }
         
-        @keyframes slideUpMobile {
+        @keyframes scaleInMobile {
             from {
-                transform: translateY(100%);
+                transform: scale(0.9);
+                opacity: 0;
             }
             to {
-                transform: translateY(0);
+                transform: scale(1);
+                opacity: 1;
             }
         }
         
         /* Mobile modal form adjustments */
         .device-mobile .modal-content h2 {
-            padding: 20px 20px 10px 20px;
-            margin: 0;
-            border-bottom: 1px solid #e1e5e9;
+            margin-bottom: 15px;
+            text-align: center;
         }
         
         .device-mobile .modal-content .form-group {
-            padding: 0 20px;
+            margin-bottom: 15px;
         }
         
-        .device-mobile .modal-content .form-actions {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 0;
-            margin: 0;
+        .device-mobile .modal-content .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
         }
         
         /* Desktop Layout Enhancements */
+        .device-desktop body {
+            height: 100vh;
+            overflow: hidden;
+        }
+        
         .device-desktop .container-desktop {
             max-width: 1600px;
+            height: calc(100vh - 30px);
+            display: flex;
+            flex-direction: column;
         }
         
         .device-desktop .nav-desktop {
@@ -995,11 +1001,11 @@
                 <!-- Charts Section -->
                 <div class="chart-row">
                     <div class="chart-container">
-                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">📊 Total Revenus vs Dépenses</h3>
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">📊 Total Revenus vs Dépenses (CAD)</h3>
                         <canvas id="totalRevenueExpenseChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel</h3>
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel (CAD)</h3>
                         <canvas id="balanceProjectionChart"></canvas>
                     </div>
                 </div>
@@ -1059,11 +1065,11 @@
                 <!-- Monthly Charts -->
                 <div class="chart-row">
                     <div class="chart-container">
-                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">🥧 Dépenses par Catégorie</h3>
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">🥧 Dépenses par Catégorie (CAD)</h3>
                         <canvas id="categoryPieChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">📊 Planifié vs Réel</h3>
+                        <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">📊 Planifié vs Réel (CAD)</h3>
                         <canvas id="plannedVsActualChart"></canvas>
                     </div>
                 </div>
@@ -1135,6 +1141,8 @@
                             <select id="recurringExpenseCategory">
                                 <option value="Téléphone">📱 Téléphone</option>
                                 <option value="Transport">🚌 Transport</option>
+                                <option value="Épicerie">🛒 Épicerie</option>
+                                <option value="Pharmacie">💊 Pharmacie</option>
                                 <option value="Abonnement">📺 Abonnement</option>
                                 <option value="Autre">📋 Autre</option>
                             </select>
@@ -1225,9 +1233,13 @@
                 <label>Catégorie</label>
                 <select id="expenseCategory">
                     <option value="Nourriture">🍽️ Nourriture</option>
+                    <option value="Épicerie">🛒 Épicerie</option>
                     <option value="Transport">🚌 Transport</option>
                     <option value="Logement">🏠 Logement</option>
+                    <option value="Pharmacie">💊 Pharmacie</option>
+                    <option value="Beauté">💅 Beauté</option>
                     <option value="Divertissement">🎉 Sortie</option>
+                    <option value="Loisirs">⚽ Loisirs</option>
                     <option value="Shopping">🛍️ Shopping</option>
                     <option value="Voyage">✈️ Voyage</option>
                     <option value="Autre">📋 Autre</option>
@@ -1287,9 +1299,13 @@
                 <label>Catégorie</label>
                 <select id="editTransactionCategory">
                     <option value="Nourriture">🍽️ Nourriture</option>
+                    <option value="Épicerie">🛒 Épicerie</option>
                     <option value="Transport">🚌 Transport</option>
                     <option value="Logement">🏠 Logement</option>
+                    <option value="Pharmacie">💊 Pharmacie</option>
+                    <option value="Beauté">💅 Beauté</option>
                     <option value="Divertissement">🎉 Sortie</option>
+                    <option value="Loisirs">⚽ Loisirs</option>
                     <option value="Shopping">🛍️ Shopping</option>
                     <option value="Voyage">✈️ Voyage</option>
                     <option value="Autre">📋 Autre</option>
@@ -1323,6 +1339,8 @@
                 <select id="editRecurringCategory">
                     <option value="Téléphone">📱 Téléphone</option>
                     <option value="Transport">🚌 Transport</option>
+                    <option value="Épicerie">🛒 Épicerie</option>
+                    <option value="Pharmacie">💊 Pharmacie</option>
                     <option value="Abonnement">📺 Abonnement</option>
                     <option value="Autre">📋 Autre</option>
                 </select>
@@ -2576,7 +2594,7 @@
                 const canvas = document.getElementById('balanceProjectionChart');
                 const container = canvas.parentElement;
                 container.innerHTML = `
-                    <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel</h3>
+                    <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel (CAD)</h3>
                     <div style="text-align: center; padding: 40px; color: #666;">
                         <p>Configurez vos dates de séjour dans les paramètres pour voir la projection du solde</p>
                     </div>
@@ -2588,7 +2606,7 @@
             const container = document.getElementById('balanceProjectionChart').parentElement;
             if (!container.querySelector('canvas')) {
                 container.innerHTML = `
-                    <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel</h3>
+                    <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel (CAD)</h3>
                     <canvas id="balanceProjectionChart"></canvas>
                 `;
             }
