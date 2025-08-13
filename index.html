@@ -267,7 +267,8 @@
             background: white;
             border: 1px solid #e5e7eb;
             border-radius: 6px;
-            max-height: 200px;
+            max-height: 400px;
+            min-height: 300px;
             overflow-y: auto;
         }
 
@@ -275,9 +276,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px;
+            padding: 12px 14px;
             border-bottom: 1px solid #f3f4f6;
-            font-size: 0.8em;
+            min-height: 60px;
+            font-size: 0.9em;
         }
 
         .list-item:hover {
@@ -520,35 +522,35 @@
         /* Month Overview Cards */
         .overview-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 10px;
-            margin-bottom: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .overview-card {
             background: white;
             border-radius: 6px;
-            padding: 10px;
+            padding: 8px;
             border-left: 3px solid #009739;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .overview-card h3 {
-            font-size: 0.75em;
+            font-size: 0.7em;
             color: #6b7280;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: 600;
         }
 
         .overview-card .value {
-            font-size: 1.1em;
+            font-size: 0.95em;
             font-weight: bold;
             color: #002776;
             margin-bottom: 2px;
         }
 
         .overview-card .subvalue {
-            font-size: 0.7em;
+            font-size: 0.65em;
             color: #9ca3af;
         }
 
@@ -1210,13 +1212,17 @@
             
             currentPage = pageId;
             
-            // Update display when switching pages
+            // Update display and categories when switching pages
             updateDisplay();
+            updateCategorySelectors();
         }
 
         // Modal Functions
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
+            
+            // Update category selectors to ensure custom categories are available
+            updateCategorySelectors();
             
             // Set default date to today in Rio de Janeiro timezone (UTC-3)
             const now = new Date();
