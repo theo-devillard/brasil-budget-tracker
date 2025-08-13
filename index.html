@@ -35,10 +35,9 @@
             padding: 15px;
             font-size: 14px;
             margin: 0;
-            /* Touch improvements for iOS */
+            /* Basic touch improvements for iOS */
             -webkit-touch-callout: none;
             -webkit-user-select: none;
-            touch-action: manipulation;
         }
 
         .container {
@@ -626,19 +625,10 @@
             min-height: 48px; /* Ensure touch target is large enough */
         }
         
-        /* Improve touch targets on mobile */
+        /* Basic mobile touch improvements */
         .device-mobile button {
             min-height: 44px;
-            min-width: 44px;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-        }
-        
-        .device-mobile .edit-btn,
-        .device-mobile .delete-btn {
-            min-height: 40px;
-            min-width: 40px;
-            padding: 8px;
         }
         
         /* Desktop Layout Enhancements */
@@ -1482,34 +1472,6 @@
             container.classList.add('container-desktop');
         }
         
-        function initializeTouchEvents(container = document) {
-            // Initialize touch events for dynamically added buttons
-            const buttonsWithOnclick = container.querySelectorAll('button[onclick]');
-            buttonsWithOnclick.forEach(button => {
-                if (!button.hasAttribute('data-touch-initialized') && !button.matches('input, textarea, select')) {
-                    button.setAttribute('data-touch-initialized', 'true');
-                    
-                    button.addEventListener('touchstart', function(e) {
-                        this.style.opacity = '0.7';
-                    });
-                    
-                    button.addEventListener('touchend', function(e) {
-                        this.style.opacity = '';
-                        if (this.tagName === 'BUTTON') {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setTimeout(() => {
-                                this.click();
-                            }, 10);
-                        }
-                    });
-                    
-                    button.addEventListener('touchcancel', function(e) {
-                        this.style.opacity = '';
-                    });
-                }
-            });
-        }
         
         let budget = {
             total: 0,
@@ -1969,11 +1931,6 @@
             
             // Update charts with a small delay to ensure DOM is ready
             setTimeout(updateCharts, 100);
-            
-            // Reinitialize touch events for mobile after DOM updates
-            if (currentDevice === 'mobile') {
-                setTimeout(initializeTouchEvents, 150);
-            }
         }
 
         function updateDashboard() {
@@ -2968,37 +2925,8 @@
             loadBudgetData();
             updateDisplay();
             
-            // Add touch event support for better iPhone compatibility - more selective approach
-            const buttonsWithOnclick = document.querySelectorAll('button[onclick]');
-            buttonsWithOnclick.forEach(button => {
-                // Only add touch handling if it's not an input element that needs normal touch behavior
-                if (!button.matches('input, textarea, select')) {
-                    button.addEventListener('touchstart', function(e) {
-                        // Add visual feedback
-                        this.style.opacity = '0.7';
-                    });
-                    
-                    button.addEventListener('touchend', function(e) {
-                        // Remove visual feedback
-                        this.style.opacity = '';
-                        
-                        // Only prevent default and trigger click if this is a button
-                        if (this.tagName === 'BUTTON') {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            // Use setTimeout to ensure the click happens after touch processing
-                            setTimeout(() => {
-                                this.click();
-                            }, 10);
-                        }
-                    });
-                    
-                    button.addEventListener('touchcancel', function(e) {
-                        // Remove visual feedback if touch is cancelled
-                        this.style.opacity = '';
-                    });
-                }
-            });
+            // Simple touch support for iPhone - minimal interference
+            // Just ensure tap highlighting works properly without interfering with normal behavior
             
             // Handle window resize for dynamic layout switching
             let resizeTimeout;
