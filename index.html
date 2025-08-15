@@ -160,13 +160,11 @@
         }
 
         .btn:hover, .btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 151, 57, 0.3);
+            opacity: 0.9;
         }
         
         .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            opacity: 0.8;
         }
 
         .btn-income {
@@ -519,11 +517,9 @@
 
         .nav-btn:hover, .nav-btn:active {
             background: rgba(255,255,255,0.3);
-            transform: translateY(-1px);
         }
         
         .nav-btn:active {
-            transform: translateY(0);
             background: rgba(255,255,255,0.4);
         }
 
@@ -754,13 +750,11 @@
         }
         
         .device-desktop .widget:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            opacity: 0.95;
         }
         
         .device-desktop .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,151,57,0.3);
+            opacity: 0.9;
         }
 
         /* Container layouts for full-width pages */
@@ -770,22 +764,151 @@
             max-width: none;
         }
         
-        .dashboard-container .widget, .monthly-container .widget {
-            margin-bottom: 20px;
+        /* Dashboard 2x4 Grid Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 300px auto;
+            gap: 20px;
             width: 100%;
         }
         
-        /* Side-by-side layouts */
-        .dashboard-side-by-side, .monthly-side-by-side {
+        .dashboard-combined-widget {
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+        }
+        
+        .dashboard-recent-transactions {
+            grid-column: 3 / 5;
+            grid-row: 1 / 2;
+        }
+        
+        .dashboard-chart {
+            grid-column: 1 / 5;
+            grid-row: 2 / 3;
+        }
+        
+        /* Monthly 2x4 Grid Layout */
+        .monthly-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 450px auto;
             gap: 20px;
-            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .monthly-top-widget {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+        }
+        
+        .monthly-planning-vs-reality {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+        
+        .monthly-transactions-list {
+            grid-column: 3 / 5;
+            grid-row: 1 / 2;
+        }
+        
+        .monthly-pie-chart {
+            grid-column: 1 / 3;
+            grid-row: 2 / 3;
+        }
+        
+        .monthly-planned-vs-actual {
+            grid-column: 3 / 5;
+            grid-row: 2 / 3;
+        }
+        
+        /* Widget spacing for grid layouts */
+        .dashboard-container .widget,
+        .monthly-container .widget {
+            margin: 0; /* Remove default margin since grid handles spacing */
+        }
+        
+        /* Dashboard widget content scrolling */
+        .dashboard-container .widget {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 16px 6px 16px; /* Reduce bottom padding to 6px */
+        }
+        
+        .dashboard-container .widget .list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        
+        .dashboard-container .overview-cards {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+        
+        /* Monthly widget content scrolling */
+        .monthly-container .widget {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .monthly-container .widget .list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 350px;
+        }
+        
+        .monthly-container .summary-grid,
+        .monthly-container .quick-actions,
+        .monthly-container .month-nav {
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .dashboard-combined-widget,
+            .dashboard-recent-transactions {
+                grid-column: 1 / 2;
+            }
+            
+            .dashboard-combined-widget { grid-row: 1 / 2; }
+            .dashboard-recent-transactions { grid-row: 2 / 3; }
+            .dashboard-chart { 
+                grid-column: 1 / 2;
+                grid-row: 3 / 4; 
+            }
+            
+            .monthly-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto auto;
+            }
+            
+            .monthly-top-widget,
+            .monthly-planning-vs-reality,
+            .monthly-transactions-list,
+            .monthly-pie-chart,
+            .monthly-planned-vs-actual {
+                grid-column: 1 / 2;
+            }
+            
+            .monthly-top-widget { grid-row: 1 / 2; }
+            .monthly-planning-vs-reality { grid-row: 2 / 3; }
+            .monthly-transactions-list { grid-row: 3 / 4; }
+            .monthly-pie-chart { grid-row: 4 / 5; }
+            .monthly-planned-vs-actual { grid-row: 5 / 6; }
         }
         
         @media (max-width: 768px) {
-            .dashboard-side-by-side, .monthly-side-by-side {
+            .planning-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
         }
 
@@ -957,8 +1080,7 @@
         }
 
         .quick-action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0.9;
         }
 
         /* Month Overview Cards */
@@ -972,7 +1094,7 @@
         .overview-card {
             background: white;
             border-radius: 6px;
-            padding: 10px;
+            padding: 4px;
             border-left: 3px solid #009739;
             box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         }
@@ -1134,6 +1256,75 @@
         .device-mobile input[type="date"] {
             max-width: 150px;
             width: auto;
+            font-size: 16px;
+            min-height: 44px;
+        }
+
+        /* Enhanced iPhone-specific optimizations */
+        @supports (-webkit-touch-callout: none) {
+            /* iOS-only styles */
+            .modal-content {
+                /* Better scrolling on iOS when content overflows */
+                -webkit-overflow-scrolling: touch;
+                overflow-y: auto;
+                max-height: calc(100vh - 40px);
+            }
+
+            /* Prevent rubber band scrolling when modal is open */
+            body.modal-open {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            /* Better tap targets for small buttons */
+            .edit-btn, .delete-btn, .close-btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 8px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Improve touch feedback for interactive elements */
+            .list-item:active,
+            .nav-btn-mobile:active,
+            .quick-action-btn:active {
+                transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+
+            /* Better input handling for iOS keyboards */
+            input, select, textarea {
+                font-size: 16px; /* Prevents zoom */
+                -webkit-appearance: none;
+                border-radius: 8px;
+                padding: 12px;
+                min-height: 44px;
+            }
+
+            /* Improved modal button spacing */
+            .device-mobile .modal-content .btn {
+                min-height: 48px;
+                margin-top: 10px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            /* Enhanced swipe gesture support */
+            .nav-mobile {
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            /* Better visual feedback for active states */
+            .currency-toggle button:active {
+                transform: scale(0.95);
+                background-color: rgba(0, 151, 57, 0.1);
+            }
         }
 
         /* Planning Comparison Styles */
@@ -1302,68 +1493,80 @@
         <!-- Dashboard/Home Page -->
         <div id="dashboard" class="page active">
             <div class="dashboard-container">
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <button class="quick-action-btn add-expense" onclick="openModal('expenseModal')">
-                        💸 Ajouter Dépense
-                    </button>
-                    <button class="quick-action-btn add-income" onclick="openModal('incomeModal')">
-                        💰 Ajouter Revenu
-                    </button>
-                </div>
-
-                <!-- Overview Cards -->
-                <div class="overview-cards">
-                    <div class="overview-card">
-                        <h3>Solde Actuel Estimé</h3>
-                        <div class="value" id="dashCurrentBalance">0 $ CAD</div>
-                        <div class="subvalue" id="dashCurrentBalanceBRL">0 R$</div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Dépenses Totales</h3>
-                        <div class="value" id="dashTotalExpenses">0 $ CAD</div>
-                        <div class="subvalue" id="dashTotalExpensesBRL">0 R$</div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Revenus Totaux</h3>
-                        <div class="value" id="dashTotalIncome">0 $ CAD</div>
-                        <div class="subvalue" id="dashTotalIncomeBRL">0 R$</div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Bilan Net</h3>
-                        <div class="value" id="dashNetBalance">0 $ CAD</div>
-                        <div class="subvalue" id="dashNetBalanceBRL">0 R$</div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Dépenses Du Mois</h3>
-                        <div class="value" id="dashMonthBalance">0 $ CAD</div>
-                        <div class="subvalue" id="dashMonthBalanceBRL">0 R$</div>
-                        <div class="subvalue" id="dashCurrentMonthName" style="font-size: 0.75em; margin-top: 2px;"></div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>% Budget Atteint</h3>
-                        <div class="value" id="dashProgress">0%</div>
-                        <div class="subvalue">du budget utilisé</div>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Budget de l'Échange</h3>
-                        <div class="value" id="dashTotalBudget">0 $ CAD</div>
-                        <div class="subvalue" id="dashTotalBudgetBRL">0 R$</div>
-                    </div>
-                </div>
-
-                <!-- Side by Side Section: Recent Transactions & Chart -->
-                <div class="dashboard-side-by-side">
-                    <div class="widget">
-                        <h2>📝 Transactions Récentes</h2>
-                        <div class="list" id="recentTransactionsList">
-                            <div class="empty-state">
-                                <h4>Aucune transaction récente</h4>
-                                <p>Vos transactions apparaîtront ici</p>
-                            </div>
-                        </div>
+                <!-- Combined Quick Actions and Financial Overview -->
+                <div class="dashboard-combined-widget widget">
+                    <h2>📊 Aperçu & Actions Rapides</h2>
+                    
+                    <!-- Quick Actions Section -->
+                    <div class="quick-actions" style="margin-bottom: 20px;">
+                        <button class="quick-action-btn add-expense" onclick="openModal('expenseModal')">
+                            💸 Ajouter Dépense
+                        </button>
+                        <button class="quick-action-btn add-income" onclick="openModal('incomeModal')">
+                            💰 Ajouter Revenu
+                        </button>
                     </div>
                     
+                    <!-- Financial Overview Section -->
+                    <div class="overview-cards">
+                        <div class="overview-card">
+                            <h3>Solde Actuel Estimé</h3>
+                            <div class="value" id="dashCurrentBalance">0 $ CAD</div>
+                            <div class="subvalue" id="dashCurrentBalanceBRL">0 R$</div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Dépenses Totales</h3>
+                            <div class="value" id="dashTotalExpenses">0 $ CAD</div>
+                            <div class="subvalue" id="dashTotalExpensesBRL">0 R$</div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Revenus Totaux</h3>
+                            <div class="value" id="dashTotalIncome">0 $ CAD</div>
+                            <div class="subvalue" id="dashTotalIncomeBRL">0 R$</div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Bilan Net</h3>
+                            <div class="value" id="dashNetBalance">0 $ CAD</div>
+                            <div class="subvalue" id="dashNetBalanceBRL">0 R$</div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Dépenses Du Mois</h3>
+                            <div class="value" id="dashMonthBalance">0 $ CAD</div>
+                            <div class="subvalue" id="dashMonthBalanceBRL">0 R$</div>
+                            <div class="subvalue" id="dashCurrentMonthName" style="font-size: 0.75em; margin-top: 2px;"></div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>% Budget Atteint</h3>
+                            <div class="value" id="dashProgress">0%</div>
+                            <div class="subvalue">du budget utilisé</div>
+                        </div>
+                        <div class="overview-card">
+                            <h3>Budget de l'Échange</h3>
+                            <div class="value" id="dashTotalBudget">0 $ CAD</div>
+                            <div class="subvalue" id="dashTotalBudgetBRL">0 R$</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="dashboard-recent-transactions widget">
+                    <h2>📝 Transactions Récentes</h2>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label>Filtrer par catégorie:</label>
+                        <select id="recentTransactionCategoryFilter" onchange="updateRecentTransactionsFilter()" style="margin-top: 4px;">
+                            <option value="">Toutes les catégories</option>
+                        </select>
+                    </div>
+                    <div class="list" id="recentTransactionsList">
+                        <div class="empty-state">
+                            <h4>Aucune transaction récente</h4>
+                            <p>Vos transactions apparaîtront ici</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chart -->
+                <div class="dashboard-chart widget">
                     <div class="chart-container">
                         <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">💰 Solde Prévisionnel vs Réel (CAD)</h3>
                         <div class="chart-period-controls" style="text-align: center; margin-bottom: 15px;">
@@ -1383,7 +1586,7 @@
         <div id="monthly" class="page">
             <div class="monthly-container">
                 <!-- Month Navigation -->
-                <div class="widget">
+                <div class="monthly-top-widget widget">
                     <h2>📅 Vue Mensuelle</h2>
                     <div class="month-nav">
                         <button class="month-btn" onclick="changeMonth(-1)">←</button>
@@ -1416,43 +1619,50 @@
                     </div>
                 </div>
 
-                <!-- Side by Side Section: Planning vs Reality & Monthly Transactions -->
-                <div class="monthly-side-by-side">
-                    <div class="widget">
-                        <h2>🎯 Planification vs Réalité</h2>
-                        <div id="planningComparison">
-                            <div class="empty-state">
-                                <h4>Comparaison de planification</h4>
-                                <p>Configurez vos objectifs dans les paramètres</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="widget">
-                        <h2>📋 Transactions du Mois</h2>
-                        <div class="list" id="monthTransactionsList">
-                            <div class="empty-state">
-                                <h4>Aucune transaction ce mois</h4>
-                                <p>Les transactions apparaîtront ici</p>
-                            </div>
+                <!-- Planning vs Reality -->
+                <div class="monthly-planning-vs-reality widget">
+                    <h2>🎯 Planification vs Réalité</h2>
+                    <div id="planningComparison">
+                        <div class="empty-state">
+                            <h4>Comparaison de planification</h4>
+                            <p>Configurez vos objectifs dans les paramètres</p>
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <!-- Monthly Transactions -->
+                <div class="monthly-transactions-list widget">
+                    <h2>📋 Transactions du Mois</h2>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label>Filtrer par catégorie:</label>
+                        <select id="monthTransactionCategoryFilter" onchange="updateMonthTransactionsFilter()" style="margin-top: 4px;">
+                            <option value="">Toutes les catégories</option>
+                        </select>
+                    </div>
+                    <div class="list" id="monthTransactionsList">
+                        <div class="empty-state">
+                            <h4>Aucune transaction ce mois</h4>
+                            <p>Les transactions apparaîtront ici</p>
+                        </div>
+                    </div>
+                </div>
             
-            <!-- Monthly Charts Section - Full Width Below Dashboard -->
-            <div class="charts-section">
-                <div class="chart-row">
+                <!-- Category Pie Chart -->
+                <div class="monthly-pie-chart widget">
                     <div class="chart-container">
                         <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">🥧 Dépenses par Catégorie (CAD)</h3>
                         <canvas id="categoryPieChart"></canvas>
                     </div>
+                </div>
+                
+                <!-- Planned vs Actual Chart -->
+                <div class="monthly-planned-vs-actual widget">
                     <div class="chart-container">
                         <h3 style="text-align: center; margin-bottom: 10px; color: #002776;">📊 Planifié vs Réel (CAD)</h3>
                         <canvas id="plannedVsActualChart"></canvas>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -1476,7 +1686,14 @@
                                 </div>
                                 <div class="flex-row" style="margin-bottom: 4px;">
                                     <input type="number" id="recurringIncomeAmount" placeholder="800" step="0.01">
-                                    <input type="date" id="recurringIncomeStartDate" style="margin-left: 8px;" placeholder="Date de début">
+                                    <select id="recurringIncomeFrequency" style="margin-left: 8px;">
+                                        <option value="weekly">Hebdomadaire</option>
+                                        <option value="biweekly">Aux 2 semaines</option>
+                                        <option value="monthly" selected>Mensuel</option>
+                                    </select>
+                                </div>
+                                <div class="flex-row" style="margin-bottom: 4px;">
+                                    <input type="date" id="recurringIncomeStartDate" placeholder="Date de début">
                                 </div>
                             </div>
                             <button class="btn btn-income" onclick="addRecurringIncome()">+ Revenu Récurrent</button>
@@ -1493,6 +1710,13 @@
                                 </div>
                                 <div class="flex-row" style="margin-bottom: 4px;">
                                     <input type="number" id="recurringExpenseAmount" placeholder="50" step="0.01">
+                                    <select id="recurringExpenseFrequency" style="margin-left: 8px;">
+                                        <option value="weekly">Hebdomadaire</option>
+                                        <option value="biweekly">Aux 2 semaines</option>
+                                        <option value="monthly" selected>Mensuel</option>
+                                    </select>
+                                </div>
+                                <div class="flex-row" style="margin-bottom: 4px;">
                                     <select id="recurringExpenseCategory">
                                         <option value="Téléphone">📱 Téléphone</option>
                                         <option value="Transport">🚌 Transport</option>
@@ -1883,6 +2107,14 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Fréquence</label>
+                <select id="editRecurringFrequency">
+                    <option value="weekly">Hebdomadaire</option>
+                    <option value="biweekly">Aux 2 semaines</option>
+                    <option value="monthly">Mensuel</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Date de début</label>
                 <input type="date" id="editRecurringStartDate" placeholder="Date de début">
             </div>
@@ -2077,6 +2309,8 @@
         // Modal Functions
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
+            // Prevent body scroll on iOS
+            document.body.classList.add('modal-open');
             
             // Update category selectors to ensure custom categories are available
             updateCategorySelectors();
@@ -2096,12 +2330,58 @@
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
+            // Re-enable body scroll on iOS
+            document.body.classList.remove('modal-open');
         }
 
-        // Close modal when clicking outside
+        // Close modal when clicking outside - enhanced for touch devices
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
+            }
+        });
+
+        // Enhanced touch support for modals
+        document.addEventListener('touchstart', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            }
+        }, { passive: true });
+
+        // Prevent modal close when touching modal content
+        document.querySelectorAll('.modal-content').forEach(content => {
+            content.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+            content.addEventListener('touchstart', function(event) {
+                event.stopPropagation();
+            }, { passive: true });
+        });
+
+        // Keyboard shortcuts for better accessibility
+        document.addEventListener('keydown', function(event) {
+            // ESC to close modal
+            if (event.key === 'Escape') {
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    activeModal.classList.remove('active');
+                    document.body.classList.remove('modal-open');
+                }
+            }
+            
+            // Keyboard navigation between tabs (only on desktop)
+            if (!detectDevice().isMobile && event.ctrlKey) {
+                const pages = ['dashboard', 'monthly', 'planning', 'settings'];
+                const currentIndex = pages.indexOf(currentPage);
+                
+                if (event.key === 'ArrowLeft' && currentIndex > 0) {
+                    event.preventDefault();
+                    showPage(pages[currentIndex - 1]);
+                } else if (event.key === 'ArrowRight' && currentIndex < pages.length - 1) {
+                    event.preventDefault();
+                    showPage(pages[currentIndex + 1]);
+                }
             }
         });
 
@@ -2234,9 +2514,29 @@
                     // Migrate old planned expenses to include transactionType
                     budget.plannedExpenses.forEach(expense => {
                         if (!expense.transactionType) expense.transactionType = 'expense';
+                        
+                        // Migrate recurring transactions to include startMonth/endMonth if missing
+                        if (expense.type === 'recurring' && expense.startDate && expense.endDate && (!expense.startMonth || !expense.endMonth)) {
+                            const startDateParts = expense.startDate.split('-');
+                            const endDateParts = expense.endDate.split('-');
+                            const startDateObj = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+                            const endDateObj = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                            expense.startMonth = `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, '0')}`;
+                            expense.endMonth = `${endDateObj.getFullYear()}-${String(endDateObj.getMonth() + 1).padStart(2, '0')}`;
+                        }
                     });
                     budget.plannedIncome.forEach(income => {
                         if (!income.transactionType) income.transactionType = 'income';
+                        
+                        // Migrate recurring transactions to include startMonth/endMonth if missing
+                        if (income.type === 'recurring' && income.startDate && income.endDate && (!income.startMonth || !income.endMonth)) {
+                            const startDateParts = income.startDate.split('-');
+                            const endDateParts = income.endDate.split('-');
+                            const startDateObj = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+                            const endDateObj = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                            income.startMonth = `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, '0')}`;
+                            income.endMonth = `${endDateObj.getFullYear()}-${String(endDateObj.getMonth() + 1).padStart(2, '0')}`;
+                        }
                     });
                     
                     exchangeRate = parsedData.exchangeRate || exchangeRate;
@@ -2421,6 +2721,7 @@
         function addRecurringIncome() {
             const description = document.getElementById('recurringIncomeDesc').value;
             const amount = parseFloat(document.getElementById('recurringIncomeAmount').value);
+            const frequency = document.getElementById('recurringIncomeFrequency').value;
             const startDate = document.getElementById('recurringIncomeStartDate').value;
             
             if (!description || !amount || !startDate) {
@@ -2437,6 +2738,7 @@
                 originalAmount: amount,
                 originalCurrency: currentRecurringIncomeCurrency,
                 type: 'income',
+                frequency: frequency,
                 startDate: startDate
             };
 
@@ -2453,6 +2755,7 @@
         function addRecurringExpense() {
             const description = document.getElementById('recurringExpenseDesc').value;
             const amount = parseFloat(document.getElementById('recurringExpenseAmount').value);
+            const frequency = document.getElementById('recurringExpenseFrequency').value;
             const category = document.getElementById('recurringExpenseCategory').value;
             const startDate = document.getElementById('recurringExpenseStartDate').value;
             
@@ -2471,6 +2774,7 @@
                 originalCurrency: currentRecurringExpenseCurrency,
                 category,
                 type: 'expense',
+                frequency: frequency,
                 startDate: startDate
             };
 
@@ -2583,6 +2887,12 @@
 
             const amountCAD = currentPlannedRecurringRevenueCurrency === 'BRL' ? amount / exchangeRate : amount;
 
+            // Parse dates to extract month info, fixing 0-based month offset
+            const startDateParts = startDate.split('-');
+            const endDateParts = endDate.split('-');
+            const startDateObj = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+            const endDateObj = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+            
             const plannedRevenue = {
                 id: Date.now(),
                 description,
@@ -2593,6 +2903,8 @@
                 frequency: frequency,
                 startDate: startDate,
                 endDate: endDate,
+                startMonth: `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, '0')}`,
+                endMonth: `${endDateObj.getFullYear()}-${String(endDateObj.getMonth() + 1).padStart(2, '0')}`,
                 createdDate: new Date().toISOString(),
                 active: true,
                 transactionType: 'income'
@@ -2624,6 +2936,12 @@
 
             const amountCAD = currentPlannedRecurringCurrency === 'BRL' ? amount / exchangeRate : amount;
 
+            // Parse dates to extract month info, fixing 0-based month offset
+            const startDateParts = startDate.split('-');
+            const endDateParts = endDate.split('-');
+            const startDateObj = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+            const endDateObj = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+
             const plannedExpense = {
                 id: Date.now(),
                 description,
@@ -2635,6 +2953,8 @@
                 frequency: frequency, // 'weekly', 'biweekly', 'monthly'
                 startDate: startDate,
                 endDate: endDate,
+                startMonth: `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, '0')}`,
+                endMonth: `${endDateObj.getFullYear()}-${String(endDateObj.getMonth() + 1).padStart(2, '0')}`,
                 createdDate: new Date().toISOString(),
                 active: true,
                 transactionType: 'expense'
@@ -2743,9 +3063,21 @@
             let currentBalance;
             if (budget.balanceDate && budget.currentBalance !== undefined) {
                 // Filter transactions after balance date
-                const balanceDate = new Date(budget.balanceDate);
-                const incomeAfterBalance = budget.income.filter(item => new Date(item.date) >= balanceDate).reduce((sum, item) => sum + item.amount, 0);
-                const expensesAfterBalance = budget.expenses.filter(item => new Date(item.date) >= balanceDate).reduce((sum, item) => sum + item.amount, 0);
+                // Parse balance date properly to avoid timezone offset issues
+                const balanceDateParts = budget.balanceDate.split('-');
+                const balanceDate = new Date(parseInt(balanceDateParts[0]), parseInt(balanceDateParts[1]) - 1, parseInt(balanceDateParts[2]));
+                
+                const incomeAfterBalance = budget.income.filter(item => {
+                    const itemDateParts = item.date.split('-');
+                    const itemDate = new Date(parseInt(itemDateParts[0]), parseInt(itemDateParts[1]) - 1, parseInt(itemDateParts[2]));
+                    return itemDate >= balanceDate;
+                }).reduce((sum, item) => sum + item.amount, 0);
+                
+                const expensesAfterBalance = budget.expenses.filter(item => {
+                    const itemDateParts = item.date.split('-');
+                    const itemDate = new Date(parseInt(itemDateParts[0]), parseInt(itemDateParts[1]) - 1, parseInt(itemDateParts[2]));
+                    return itemDate >= balanceDate;
+                }).reduce((sum, item) => sum + item.amount, 0);
                 currentBalance = budget.currentBalance + incomeAfterBalance - expensesAfterBalance;
             } else {
                 // Fallback: just use current balance from settings
@@ -2782,6 +3114,9 @@
 
             // Update recent transactions
             updateRecentTransactions();
+            
+            // Update category selectors for filters
+            updateCategorySelectors();
 
         }
 
@@ -2830,15 +3165,42 @@
         }
 
         function updateRecentTransactions() {
-            const recentTransactions = [...budget.income, ...budget.expenses]
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .slice(0, 10);
+            const allRecentTransactions = [...budget.income, ...budget.expenses]
+                .sort((a, b) => {
+                    // Parse dates properly to avoid timezone offset issues in sorting
+                    const aDateParts = a.date.split('-');
+                    const bDateParts = b.date.split('-');
+                    const aDate = new Date(parseInt(aDateParts[0]), parseInt(aDateParts[1]) - 1, parseInt(aDateParts[2]));
+                    const bDate = new Date(parseInt(bDateParts[0]), parseInt(bDateParts[1]) - 1, parseInt(bDateParts[2]));
+                    return bDate - aDate;
+                });
+
+            // Store recent transactions globally for filtering (top 50 for filtering, display top 10)
+            window.currentRecentTransactions = allRecentTransactions.slice(0, 50);
 
             const list = document.getElementById('recentTransactionsList');
             if (!list) return;
 
+            // Apply category filter
+            const categoryFilter = document.getElementById('recentTransactionCategoryFilter');
+            const selectedCategory = categoryFilter ? categoryFilter.value : '';
+            
+            let filteredTransactions = window.currentRecentTransactions;
+            if (selectedCategory) {
+                filteredTransactions = window.currentRecentTransactions.filter(transaction => 
+                    transaction.category === selectedCategory
+                );
+            }
+            
+            // Limit to 10 most recent for display
+            const recentTransactions = filteredTransactions.slice(0, 10);
+
             if (recentTransactions.length === 0) {
-                list.innerHTML = '<div class="empty-state"><h4>Aucune transaction récente</h4><p>Vos transactions apparaîtront ici</p></div>';
+                if (selectedCategory) {
+                    list.innerHTML = `<div class="empty-state"><h4>Aucune transaction récente dans "${selectedCategory}"</h4><p>Changez le filtre pour voir d'autres transactions</p></div>`;
+                } else {
+                    list.innerHTML = '<div class="empty-state"><h4>Aucune transaction récente</h4><p>Vos transactions apparaîtront ici</p></div>';
+                }
                 return;
             }
 
@@ -2847,21 +3209,58 @@
             ).join('');
         }
 
+        function updateRecentTransactionsFilter() {
+            // Re-render the recent transactions list with the current filter
+            updateRecentTransactions();
+        }
+
         function updateMonthTransactionsList(monthTransactions) {
+            // Store month transactions globally for filtering
+            window.currentMonthTransactions = monthTransactions;
+            
             const allTransactions = [...monthTransactions.income, ...monthTransactions.expenses]
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
+                .sort((a, b) => {
+                    // Parse dates properly to avoid timezone offset issues in sorting
+                    const aDateParts = a.date.split('-');
+                    const bDateParts = b.date.split('-');
+                    const aDate = new Date(parseInt(aDateParts[0]), parseInt(aDateParts[1]) - 1, parseInt(aDateParts[2]));
+                    const bDate = new Date(parseInt(bDateParts[0]), parseInt(bDateParts[1]) - 1, parseInt(bDateParts[2]));
+                    return bDate - aDate;
+                });
 
             const list = document.getElementById('monthTransactionsList');
             if (!list) return;
 
-            if (allTransactions.length === 0) {
-                list.innerHTML = '<div class="empty-state"><h4>Aucune transaction ce mois</h4><p>Les transactions apparaîtront ici</p></div>';
+            // Apply category filter
+            const categoryFilter = document.getElementById('monthTransactionCategoryFilter');
+            const selectedCategory = categoryFilter ? categoryFilter.value : '';
+            
+            let filteredTransactions = allTransactions;
+            if (selectedCategory) {
+                filteredTransactions = allTransactions.filter(transaction => 
+                    transaction.category === selectedCategory
+                );
+            }
+
+            if (filteredTransactions.length === 0) {
+                if (selectedCategory) {
+                    list.innerHTML = `<div class="empty-state"><h4>Aucune transaction dans la catégorie "${selectedCategory}"</h4><p>Changez le filtre pour voir d'autres transactions</p></div>`;
+                } else {
+                    list.innerHTML = '<div class="empty-state"><h4>Aucune transaction ce mois</h4><p>Les transactions apparaîtront ici</p></div>';
+                }
                 return;
             }
 
-            list.innerHTML = allTransactions.map(transaction => 
+            list.innerHTML = filteredTransactions.map(transaction => 
                 createTransactionListItem(transaction)
             ).join('');
+        }
+        
+        function updateMonthTransactionsFilter() {
+            // Re-render the transactions list with the current filter
+            if (window.currentMonthTransactions) {
+                updateMonthTransactionsList(window.currentMonthTransactions);
+            }
         }
 
         function updateRecurringList() {
@@ -2916,20 +3315,36 @@
                 ...budget.plannedExpenses.filter(item => item.type === 'recurring').map(item => ({...item, isIncome: false}))
             ];
 
-            if (recurringTransactions.length === 0) {
+            // Generate HTML for transactions and filter out empty ones (inactive transactions)
+            const transactionHtml = recurringTransactions.map(item => 
+                createPlannedExpenseListItem(item)
+            ).filter(html => html.trim() !== '').join('');
+
+            if (recurringTransactions.length === 0 || transactionHtml === '') {
                 list.innerHTML = '<div class="empty-state"><h4>Aucune transaction récurrente temporaire</h4><p>Ajoutez-en une ci-dessus</p></div>';
                 return;
             }
 
-            list.innerHTML = recurringTransactions.map(item => 
-                createPlannedExpenseListItem(item)
-            ).join('');
+            list.innerHTML = transactionHtml;
         }
 
         function createPlannedExpenseListItem(transaction) {
-            const isActive = transaction.active !== false;
             const amountBRL = transaction.amount * exchangeRate;
             const isIncome = transaction.isIncome || transaction.transactionType === 'income';
+            
+            // Check if transaction is still active (not ended)
+            const today = new Date();
+            let isActive = true;
+            
+            if (transaction.type === 'recurring' && transaction.endDate) {
+                const endDateParts = transaction.endDate.split('-');
+                const endDate = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                isActive = endDate >= today;
+            } else if (transaction.type === 'once' && transaction.targetDate) {
+                const targetDateParts = transaction.targetDate.split('-');
+                const targetDate = new Date(parseInt(targetDateParts[0]), parseInt(targetDateParts[1]) - 1, parseInt(targetDateParts[2]));
+                isActive = targetDate >= today;
+            }
             
             let typeDisplay = '';
             let timeframeDisplay = '';
@@ -2944,7 +3359,9 @@
                     const targetDate = new Date(year, month, day);
                     timeframeDisplay = targetDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
                 } else {
-                    const monthDate = new Date(transaction.targetMonth + '-01');
+                    // Parse month properly to avoid timezone offset issues
+                    const monthParts = transaction.targetMonth.split('-');
+                    const monthDate = new Date(parseInt(monthParts[0]), parseInt(monthParts[1]) - 1, 1);
                     timeframeDisplay = monthDate.toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
                 }
                 typeDisplay = '<span class="planned-tag">Ponctuel</span>';
@@ -2976,10 +3393,13 @@
             
             const categoryDisplay = transaction.category ? ` • ${transaction.category}` : '';
             
+            // Don't show inactive/ended transactions in the list
+            if (!isActive) return '';
+            
             return `
-                <div class="list-item ${isActive ? '' : 'inactive'}">
+                <div class="list-item">
                     <div class="item-info">
-                        <div class="item-desc">${transaction.description} ${typeDisplay}${!isActive ? ' <span class="timeframe-tag">Arrêté</span>' : ''}</div>
+                        <div class="item-desc">${transaction.description} ${typeDisplay}</div>
                         <div class="item-meta">${timeframeDisplay}${categoryDisplay}</div>
                     </div>
                     <div class="item-amount">
@@ -3096,7 +3516,13 @@
         function createRecurringListItem(item) {
             const isIncome = item.type === 'income';
             const amountBRL = item.amount * exchangeRate;
-            const startDate = item.startDate ? new Date(item.startDate).toLocaleDateString('fr-FR') : 'Non définie';
+            // Parse startDate properly to avoid timezone offset issues
+            let startDate = 'Non définie';
+            if (item.startDate) {
+                const dateParts = item.startDate.split('-');
+                const dateObj = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                startDate = dateObj.toLocaleDateString('fr-FR');
+            }
             
             return `
                 <div class="list-item">
@@ -3143,7 +3569,7 @@
             if (!plannedTransaction) return;
 
             const now = new Date();
-            const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD format
 
             if (plannedTransaction.type === 'once') {
                 // For one-time transactions, just remove completely
@@ -3153,12 +3579,16 @@
                     budget.plannedExpenses = budget.plannedExpenses.filter(item => item.id !== id);
                 }
             } else if (plannedTransaction.type === 'recurring') {
-                // For recurring transactions, preserve past data and stop future recurrence
-                if (plannedTransaction.startMonth <= currentYearMonth) {
-                    // If it has already started, mark as inactive from current month
-                    plannedTransaction.active = false;
-                    plannedTransaction.endMonth = currentYearMonth;
-                    plannedTransaction.deletedDate = new Date().toISOString();
+                // For recurring transactions, check if they've started
+                const startDateParts = plannedTransaction.startDate.split('-');
+                const startDate = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                if (startDate <= today) {
+                    // If it has already started, update endDate to yesterday to preserve past occurrences
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    plannedTransaction.endDate = yesterday.toISOString().split('T')[0];
                 } else {
                     // If it hasn't started yet, remove completely
                     if (isIncome) {
@@ -3307,7 +3737,9 @@
                     alert('Veuillez remplir tous les champs');
                     return;
                 }
-                const targetDate = new Date(date);
+                // Parse date properly to avoid timezone offset issues
+                const dateParts = date.split('-');
+                const targetDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
                 const targetMonth = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}`;
                 
                 transaction.targetDate = date;
@@ -3326,9 +3758,17 @@
                     return;
                 }
                 
+                // Parse dates to extract month info, fixing 0-based month offset
+                const startDateParts = startDate.split('-');
+                const endDateParts = endDate.split('-');
+                const startDateObj = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, parseInt(startDateParts[2]));
+                const endDateObj = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                
                 transaction.startDate = startDate;
                 transaction.endDate = endDate;
                 transaction.frequency = frequency;
+                transaction.startMonth = `${startDateObj.getFullYear()}-${String(startDateObj.getMonth() + 1).padStart(2, '0')}`;
+                transaction.endMonth = `${endDateObj.getFullYear()}-${String(endDateObj.getMonth() + 1).padStart(2, '0')}`;
                 
                 if (!editingPlanned.isIncome) {
                     transaction.category = document.getElementById('editPlannedCategory').value;
@@ -3350,9 +3790,30 @@
         function getPlannedTransactionsForMonth(month, year) {
             const targetYearMonth = `${year}-${String(month + 1).padStart(2, '0')}`;
             
-            // Traditional recurring income and expenses (always active)
-            const recurringIncome = budget.recurringIncome.reduce((sum, item) => sum + item.amount, 0);
-            const recurringExpenses = budget.recurringExpenses.reduce((sum, item) => sum + item.amount, 0);
+            // Traditional recurring income and expenses (with frequency support)
+            let recurringIncome = 0;
+            budget.recurringIncome.forEach(item => {
+                const frequency = item.frequency || 'monthly';
+                if (frequency === 'monthly') {
+                    recurringIncome += item.amount;
+                } else if (frequency === 'weekly') {
+                    recurringIncome += item.amount * 4.33;
+                } else if (frequency === 'biweekly') {
+                    recurringIncome += item.amount * 2.17;
+                }
+            });
+            
+            let recurringExpenses = 0;
+            budget.recurringExpenses.forEach(item => {
+                const frequency = item.frequency || 'monthly';
+                if (frequency === 'monthly') {
+                    recurringExpenses += item.amount;
+                } else if (frequency === 'weekly') {
+                    recurringExpenses += item.amount * 4.33;
+                } else if (frequency === 'biweekly') {
+                    recurringExpenses += item.amount * 2.17;
+                }
+            });
             
             // New planned income and expenses
             let plannedIncome = 0;
@@ -3372,9 +3833,17 @@
                     } else if (income.targetMonth === targetYearMonth) {
                         plannedIncome += income.amount;
                     }
-                } else if (income.type === 'recurring' && income.active !== false) {
-                    // Recurring with timeframe: check if month is within range
-                    if (income.startMonth <= targetYearMonth && income.endMonth >= targetYearMonth) {
+                } else if (income.type === 'recurring') {
+                    // Recurring with timeframe: check if month is within range and transaction hasn't ended
+                    let isStillActive = true;
+                    if (income.endDate) {
+                        const today = new Date();
+                        const endDateParts = income.endDate.split('-');
+                        const endDate = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                        isStillActive = endDate >= today;
+                    }
+                    
+                    if (isStillActive && income.startMonth <= targetYearMonth && income.endMonth >= targetYearMonth) {
                         if (income.frequency === 'monthly') {
                             plannedIncome += income.amount;
                         } else if (income.frequency === 'weekly') {
@@ -3400,9 +3869,17 @@
                     } else if (expense.targetMonth === targetYearMonth) {
                         plannedExpenses += expense.amount;
                     }
-                } else if (expense.type === 'recurring' && expense.active !== false) {
-                    // Recurring with timeframe: check if month is within range
-                    if (expense.startMonth <= targetYearMonth && expense.endMonth >= targetYearMonth) {
+                } else if (expense.type === 'recurring') {
+                    // Recurring with timeframe: check if month is within range and transaction hasn't ended
+                    let isStillActive = true;
+                    if (expense.endDate) {
+                        const today = new Date();
+                        const endDateParts = expense.endDate.split('-');
+                        const endDate = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+                        isStillActive = endDate >= today;
+                    }
+                    
+                    if (isStillActive && expense.startMonth <= targetYearMonth && expense.endMonth >= targetYearMonth) {
                         if (expense.frequency === 'monthly') {
                             plannedExpenses += expense.amount;
                         } else if (expense.frequency === 'weekly') {
@@ -3525,6 +4002,7 @@
             
             document.getElementById('editRecurringDescription').value = recurring.description;
             document.getElementById('editRecurringAmount').value = recurring.originalAmount || recurring.amount;
+            document.getElementById('editRecurringFrequency').value = recurring.frequency || 'monthly';
             document.getElementById('editRecurringStartDate').value = recurring.startDate || '';
             
             if (type === 'expense') {
@@ -3546,6 +4024,7 @@
             const description = document.getElementById('editRecurringDescription').value;
             const amount = parseFloat(document.getElementById('editRecurringAmount').value);
             const category = document.getElementById('editRecurringCategory').value;
+            const frequency = document.getElementById('editRecurringFrequency').value;
             const startDate = document.getElementById('editRecurringStartDate').value;
             
             if (!description || !amount || !startDate) {
@@ -3562,7 +4041,15 @@
                 recurring.amount = amountCAD;
                 recurring.originalAmount = amount;
                 recurring.originalCurrency = currentEditRecurringCurrency;
+                recurring.frequency = frequency;
                 recurring.startDate = startDate;
+                
+                // Fix month boundary issue by parsing date properly (same as in saveTransactionEdit)
+                const dateParts = startDate.split('-');
+                const date = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                recurring.startMonth = date.getMonth();
+                recurring.startYear = date.getFullYear();
+                
                 if (editingRecurring.type === 'expense') {
                     recurring.category = category;
                 }
@@ -3657,6 +4144,31 @@
             updateDisplay();
         }
 
+        // Unified category list - single source of truth for all categories
+        const unifiedCategories = [
+            { value: "Nourriture", emoji: "🍽️", label: "Nourriture" },
+            { value: "Épicerie", emoji: "🛒", label: "Épicerie" },
+            { value: "Transport", emoji: "🚌", label: "Transport" },
+            { value: "Logement", emoji: "🏠", label: "Logement" },
+            { value: "Hébergement", emoji: "🏨", label: "Hébergement" },
+            { value: "Téléphone", emoji: "📱", label: "Téléphone" },
+            { value: "Internet", emoji: "🌐", label: "Internet" },
+            { value: "Électricité", emoji: "⚡", label: "Électricité" },
+            { value: "Gaz", emoji: "🔥", label: "Gaz" },
+            { value: "Eau", emoji: "💧", label: "Eau" },
+            { value: "Pharmacie", emoji: "💊", label: "Pharmacie" },
+            { value: "Beauté", emoji: "💅", label: "Beauté" },
+            { value: "Divertissement", emoji: "🎉", label: "Sortie" },
+            { value: "Loisirs", emoji: "⚽", label: "Loisirs" },
+            { value: "Shopping", emoji: "🛍️", label: "Shopping" },
+            { value: "Voyage", emoji: "✈️", label: "Voyage" },
+            { value: "Activités", emoji: "🎯", label: "Activités" },
+            { value: "Cours", emoji: "📚", label: "Cours" },
+            { value: "Abonnement", emoji: "📺", label: "Abonnement" },
+            { value: "Assurance", emoji: "🛡️", label: "Assurance" },
+            { value: "Autre", emoji: "📋", label: "Autre" }
+        ];
+
         function updateCategorySelectors() {
             const selectors = [
                 'expenseCategory',
@@ -3667,6 +4179,11 @@
                 'plannedRecurringCategory',
                 'editPlannedCategory'
             ];
+            
+            const filterSelectors = [
+                'monthTransactionCategoryFilter',
+                'recentTransactionCategoryFilter'
+            ];
 
             selectors.forEach(selectorId => {
                 const selector = document.getElementById(selectorId);
@@ -3675,14 +4192,18 @@
                 // Store current value to restore after rebuild
                 const currentValue = selector.value;
                 
-                // Keep only default options (remove custom categories)
-                Array.from(selector.options).forEach(option => {
-                    if (budget.customCategories.some(cat => cat.name === option.value)) {
-                        selector.removeChild(option);
-                    }
+                // Clear all options
+                selector.innerHTML = '';
+                
+                // Add unified base categories
+                unifiedCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.value;
+                    option.textContent = `${category.emoji} ${category.label}`;
+                    selector.appendChild(option);
                 });
                 
-                // Add updated custom categories
+                // Add custom categories
                 budget.customCategories.forEach(category => {
                     const option = document.createElement('option');
                     option.value = category.name;
@@ -3693,6 +4214,50 @@
                 // Restore selected value if it still exists
                 if (Array.from(selector.options).some(option => option.value === currentValue)) {
                     selector.value = currentValue;
+                } else {
+                    // Default to "Autre" if previous value doesn't exist
+                    selector.value = "Autre";
+                }
+            });
+            
+            // Handle filter selectors separately (they include "All categories" option)
+            filterSelectors.forEach(selectorId => {
+                const selector = document.getElementById(selectorId);
+                if (!selector) return;
+
+                // Store current value to restore after rebuild
+                const currentValue = selector.value;
+                
+                // Clear all options
+                selector.innerHTML = '';
+                
+                // Add "All categories" option first
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'Toutes les catégories';
+                selector.appendChild(allOption);
+                
+                // Add unified base categories
+                unifiedCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.value;
+                    option.textContent = `${category.emoji} ${category.label}`;
+                    selector.appendChild(option);
+                });
+                
+                // Add custom categories
+                budget.customCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = `${category.emoji} ${category.name}`;
+                    selector.appendChild(option);
+                });
+                
+                // Restore selected value if it still exists, otherwise default to "All"
+                if (Array.from(selector.options).some(option => option.value === currentValue)) {
+                    selector.value = currentValue;
+                } else {
+                    selector.value = '';
                 }
             });
         }
@@ -3874,9 +4439,22 @@
                     
                 case 'full':
                 default:
+                    // Parse budget dates properly to avoid timezone offset issues
+                    let budgetStartDate = today;
+                    let budgetEndDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+                    
+                    if (budget.startDate) {
+                        const startParts = budget.startDate.split('-');
+                        budgetStartDate = new Date(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
+                    }
+                    if (budget.endDate) {
+                        const endParts = budget.endDate.split('-');
+                        budgetEndDate = new Date(parseInt(endParts[0]), parseInt(endParts[1]) - 1, parseInt(endParts[2]));
+                    }
+                    
                     return {
-                        startDate: budget.startDate ? new Date(budget.startDate) : today,
-                        endDate: budget.endDate ? new Date(budget.endDate) : new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000)
+                        startDate: budgetStartDate,
+                        endDate: budgetEndDate
                     };
             }
         }
@@ -3903,9 +4481,9 @@
                 budget.recurringIncome.forEach(income => {
                     if (income.startDate) {
                         const startTxDate = parseDate(income.startDate);
-                        const dayOfMonth = startTxDate.getDate();
+                        const frequency = income.frequency || 'monthly';
                         
-                        // Generate monthly recurrence from start date
+                        // Generate recurrence based on frequency
                         let currentDate = new Date(Math.max(startTxDate, startDate));
                         while (currentDate <= endDate) {
                             if (currentDate >= startDate) {
@@ -3918,10 +4496,17 @@
                                 });
                             }
                             
-                            // Move to next month, same day
-                            const nextMonth = currentDate.getMonth() + 1;
-                            const nextYear = nextMonth > 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-                            currentDate = getMonthlyDate(nextYear, nextMonth % 12, dayOfMonth);
+                            // Calculate next occurrence based on frequency
+                            if (frequency === 'weekly') {
+                                currentDate.setDate(currentDate.getDate() + 7);
+                            } else if (frequency === 'biweekly') {
+                                currentDate.setDate(currentDate.getDate() + 14);
+                            } else { // monthly
+                                const dayOfMonth = startTxDate.getDate();
+                                const nextMonth = currentDate.getMonth() + 1;
+                                const nextYear = nextMonth > 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
+                                currentDate = getMonthlyDate(nextYear, nextMonth % 12, dayOfMonth);
+                            }
                         }
                     }
                 });
@@ -3932,9 +4517,9 @@
                 budget.recurringExpenses.forEach(expense => {
                     if (expense.startDate) {
                         const startTxDate = parseDate(expense.startDate);
-                        const dayOfMonth = startTxDate.getDate();
+                        const frequency = expense.frequency || 'monthly';
                         
-                        // Generate monthly recurrence from start date
+                        // Generate recurrence based on frequency
                         let currentDate = new Date(Math.max(startTxDate, startDate));
                         while (currentDate <= endDate) {
                             if (currentDate >= startDate) {
@@ -3947,10 +4532,17 @@
                                 });
                             }
                             
-                            // Move to next month, same day
-                            const nextMonth = currentDate.getMonth() + 1;
-                            const nextYear = nextMonth > 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-                            currentDate = getMonthlyDate(nextYear, nextMonth % 12, dayOfMonth);
+                            // Calculate next occurrence based on frequency
+                            if (frequency === 'weekly') {
+                                currentDate.setDate(currentDate.getDate() + 7);
+                            } else if (frequency === 'biweekly') {
+                                currentDate.setDate(currentDate.getDate() + 14);
+                            } else { // monthly
+                                const dayOfMonth = startTxDate.getDate();
+                                const nextMonth = currentDate.getMonth() + 1;
+                                const nextYear = nextMonth > 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
+                                currentDate = getMonthlyDate(nextYear, nextMonth % 12, dayOfMonth);
+                            }
                         }
                     }
                 });
@@ -4476,6 +5068,37 @@
                     }
                 });
                 
+                // Enhanced swipe gesture support for tab navigation
+                let startX = 0;
+                let startY = 0;
+                let isScrolling = null;
+                
+                document.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    isScrolling = null;
+                }, { passive: true });
+                
+                document.addEventListener('touchmove', function(e) {
+                    if (isScrolling === null) {
+                        isScrolling = Math.abs(startY - e.touches[0].clientY) > Math.abs(startX - e.touches[0].clientX);
+                    }
+                }, { passive: true });
+                
+                document.addEventListener('touchend', function(e) {
+                    if (!isScrolling && Math.abs(startX - e.changedTouches[0].clientX) > 100) {
+                        const direction = startX > e.changedTouches[0].clientX ? 'left' : 'right';
+                        const pages = ['dashboard', 'monthly', 'planning', 'settings'];
+                        const currentIndex = pages.indexOf(currentPage);
+                        
+                        if (direction === 'left' && currentIndex < pages.length - 1) {
+                            showPage(pages[currentIndex + 1]);
+                        } else if (direction === 'right' && currentIndex > 0) {
+                            showPage(pages[currentIndex - 1]);
+                        }
+                    }
+                }, { passive: true });
+                
                 // Improve form focus handling on iOS
                 const inputs = document.querySelectorAll('input, select, textarea');
                 inputs.forEach(input => {
@@ -4496,7 +5119,9 @@
                     input.addEventListener('blur', function() {
                         // Restore scrolling after keyboard dismissal
                         setTimeout(() => {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            if (!document.querySelector('.modal.active')) {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
                         }, 100);
                     });
                 });
@@ -4512,6 +5137,39 @@
                 chartContainers.forEach(container => {
                     container.style.touchAction = 'pan-x pan-y pinch-zoom';
                 });
+                
+                // Add pull-to-refresh functionality
+                let startTouchY = 0;
+                let isPulling = false;
+                
+                document.addEventListener('touchstart', function(e) {
+                    if (window.scrollY === 0) {
+                        startTouchY = e.touches[0].clientY;
+                    }
+                }, { passive: true });
+                
+                document.addEventListener('touchmove', function(e) {
+                    if (window.scrollY === 0 && e.touches[0].clientY > startTouchY + 100) {
+                        if (!isPulling) {
+                            isPulling = true;
+                            // Visual feedback for pull-to-refresh
+                            document.body.style.transform = 'translateY(10px)';
+                        }
+                    }
+                }, { passive: true });
+                
+                document.addEventListener('touchend', function(e) {
+                    if (isPulling) {
+                        isPulling = false;
+                        document.body.style.transform = '';
+                        // Trigger refresh
+                        updateDisplay();
+                        // Haptic feedback
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(50);
+                        }
+                    }
+                }, { passive: true });
             }
             
             // Handle window resize for dynamic layout switching
